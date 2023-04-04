@@ -8,6 +8,7 @@ const {
 } = require("../auth");
 
 async function createUser(req, res) {
+
     try {
         const firstName = req.body.firstName
         const lastName = req.body.lastName
@@ -34,6 +35,7 @@ async function createUser(req, res) {
                 userFound: user
             })
         }
+        
         res.json({
             success : false,
             message : 'user already exists'

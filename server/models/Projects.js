@@ -5,9 +5,9 @@ const projectSchema = new mongoose.Schema({
     title : String,
     description: String,
     issueIds : [String],
-    commentIds : [String],
     adminIds : [String],
     userIds : [String],
+    id : {type : String, default : uuidv4},
     stages : ['To Do', 'In Progress', 'In Review', 'Done']
 })
 

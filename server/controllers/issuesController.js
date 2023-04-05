@@ -6,6 +6,7 @@ async function createIssue(req, res) {
         const text = req.body.text
         const priority = req.body.priority
         const creatorID = req.body.creatorID
+        const projectID = req.body.projectID
 
         const newIssue = new Issue({
             text,

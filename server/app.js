@@ -11,7 +11,7 @@ require("dotenv").config()
 const { mongooseConnect } = require('./mongoose.js')
 mongooseConnect()
 
-const issuesRouter = require('./routes/issues')
+// const issuesRouter = require('./routes/issues')
 const usersRouter = require('./routes/users')
 const projectsRouter = require('./routes/projects')
 
@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', usersRouter);
 app.use('/projects', projectsRouter);
-app.use('/issues', issuesRouter)
+// app.use('/issues', issuesRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

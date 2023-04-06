@@ -16,6 +16,10 @@ const projectSchema = new mongoose.Schema({
         lastModified : {type: Date, default : Date.now()},
         lastModifiedByID : String,
         id : {type : String, default : uuidv4},
+        history : [{
+            statement : String,
+            createdAt : {type: Date}
+        }],
         comments : [{
             text : String,
             creatorID : String,

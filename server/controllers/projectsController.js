@@ -57,19 +57,15 @@ async function addIssue(req, res) {
                 "createdAt" : Date.now()
             }]
         
-        console.log(fullHistory)
-        
         const updatedProject = await Project.findByIdAndUpdate(id, 
             {
                 issues : fullIssues,         
                 history : fullHistory
             })
             
-        // console.log(fullIssues)
         res.json({
             success : true,
-            // project : project,
-            // updatedProject : updatedProject
+            updatedProject : updatedProject
         })
     }
     catch (e) {
@@ -85,14 +81,23 @@ async function addComment(req, res) {
     try{
         const projectID = req.params.projectID
         const issueID = req.params.issueID
+        const user = await User.findOne({id : req.body.creatorID})
         const project = await Project.findOne({id : projectID})
-        const id = project[0]._id
+        const id = project._id
+
         const issueToAddComment = project.issues.filter(issue => issue.id === issueID)[0]
         const allOtherIssues = project.issues.filter(issue => issue.id !== issueID)
+
         issueToAddComment.comments = [...issueToAddComment.comments, {
             "text" : req.body.text,
             "creatorID" : req.body.creatorID
         }]
+
+        issueToAddComment.history = [...issueToAddComment.history, {
+            statement : `${user.firstName} ${user.lastName[0]} added a comment`,
+            'createdAt' : Date.now()
+        }]
+
         const allIssues = allOtherIssues.concat(issueToAddComment)
         console.log(allIssues)
 

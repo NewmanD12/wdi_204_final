@@ -4,6 +4,7 @@ const { v4 : uuidv4 } = require('uuid')
 const projectSchema = new mongoose.Schema({
     title : String,
     description: String,
+    status: String,
     id : {type : String, default : uuidv4},
     issues : [{
         text : String,
@@ -11,24 +12,34 @@ const projectSchema = new mongoose.Schema({
         creatorID : String,
         assigneeID : String,
         stage : String,
+        createdAt : {type: Date, default : Date.now()},
+        lastModified : {type: Date, default : Date.now()},
+        lastModifiedByID : String,
         id : {type : String, default : uuidv4},
         comments : [{
             text : String,
             creatorID : String,
             id : {type : String, default : uuidv4},
+            createdAt : {type: Date, default : Date.now()},
+            lastModified : {type: Date, default : Date.now()},
             replies : [{
                 text : String,
                 creatorID : String,
-                id : {type : String, default : uuidv4}
+                id : {type : String, default : uuidv4},
+                createdAt : {type: Date, default : Date.now()},
+                lastModified : {type: Date, default : Date.now()},
             }]
         }]
     }],
-    activity : {
-        history : [String],
-        comments : [String]
-    },
+    history : [{
+        statement : String,
+        createdAt : {type: Date}
+    }],
     adminIds : [String],
-    userIds : [String]
+    userIds : [String],
+    createdAt : {type: Date, default : Date.now()},
+    lastModified : {type: Date, default : Date.now()},
+    lastModifiedByID : String
 })
 
 const Project = mongoose.model('projects', projectSchema)

@@ -1,4 +1,5 @@
 const Project = require('../models/Projects')
+const User = require('../models/Users')
 
 async function createProject(req, res) {
     try {
@@ -36,23 +37,39 @@ async function allProjects(req, res) {
 }
 
 async function addIssue(req, res) {
-    const projectID = req.params.projectID
-    const project = await Project.find({id : projectID})
-    const currentIssues = project[0].issues
-    const fullIssues = [...currentIssues, 
-        {
-            "text" : req.body.text, 
-            "priority" : req.body.priority, 
-            "creatorID" : req.body.creatorID
-        }]
-    console.log(fullIssues)
-
+    
     try{
-        const updatedProject = await Project.findOneAndUpdate(projectID, {issues : fullIssues})
-
+        const projectID = req.params.projectID
+        const project = await Project.findOne({id : projectID})
+        const user = await User.findOne({id : req.body.creatorID})
+        const id = project._id
+        const currentIssues = project.issues
+        const currentHistory = project.history
+        const fullIssues = [...currentIssues, 
+            {
+                "text" : req.body.text, 
+                "priority" : req.body.priority, 
+                "creatorID" : req.body.creatorID
+            }]
+        const fullHistory = [...currentHistory, 
+            {
+                "statement" : `${user.firstName} ${user.lastName[0]} added an issue`,
+                "createdAt" : Date.now()
+            }]
+        
+        console.log(fullHistory)
+        
+        const updatedProject = await Project.findByIdAndUpdate(id, 
+            {
+                issues : fullIssues,         
+                history : fullHistory
+            })
+            
+        // console.log(fullIssues)
         res.json({
             success : true,
-            project : updatedProject
+            // project : project,
+            // updatedProject : updatedProject
         })
     }
     catch (e) {
@@ -64,15 +81,14 @@ async function addIssue(req, res) {
 }
 
 async function addComment(req, res) {
-    const projectID = req.params.projectID
-    const issueID = req.params.issueID
-    // console.log(projectID)
-    // console.log(issueID)
     
     try{
-        const project = await Project.find({id : projectID})
-        const issueToAddComment = project[0].issues.filter(issue => issue.id === issueID)[0]
-        const allOtherIssues = project[0].issues.filter(issue => issue.id !== issueID)
+        const projectID = req.params.projectID
+        const issueID = req.params.issueID
+        const project = await Project.findOne({id : projectID})
+        const id = project[0]._id
+        const issueToAddComment = project.issues.filter(issue => issue.id === issueID)[0]
+        const allOtherIssues = project.issues.filter(issue => issue.id !== issueID)
         issueToAddComment.comments = [...issueToAddComment.comments, {
             "text" : req.body.text,
             "creatorID" : req.body.creatorID
@@ -80,7 +96,7 @@ async function addComment(req, res) {
         const allIssues = allOtherIssues.concat(issueToAddComment)
         console.log(allIssues)
 
-        const updatedProject = await Project.findOneAndUpdate(projectID, {issues : allIssues})
+        const updatedProject = await Project.findByIdAndUpdate(id, {issues : allIssues})
 
 
         res.json({

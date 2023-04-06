@@ -77,7 +77,6 @@ async function addIssue(req, res) {
 }
 
 async function addComment(req, res) {
-    
     try{
         const projectID = req.params.projectID
         const issueID = req.params.issueID
@@ -90,19 +89,18 @@ async function addComment(req, res) {
 
         issueToAddComment.comments = [...issueToAddComment.comments, {
             "text" : req.body.text,
-            "creatorID" : req.body.creatorID
+            "creatorID" : req.body.creatorID,
+            "createdAt" : Date.now()
         }]
 
         issueToAddComment.history = [...issueToAddComment.history, {
-            statement : `${user.firstName} ${user.lastName[0]} added a comment`,
-            'createdAt' : Date.now()
+            "statement" : `${user.firstName} ${user.lastName[0]} added a comment`,
+            "createdAt" : Date.now()
         }]
 
         const allIssues = allOtherIssues.concat(issueToAddComment)
-        console.log(allIssues)
 
         const updatedProject = await Project.findByIdAndUpdate(id, {issues : allIssues})
-
 
         res.json({
             success : true,
@@ -115,10 +113,48 @@ async function addComment(req, res) {
 
 }
 
+async function addReply(req, res){
+    try{
+        const projectID = req.params.projectID
+        const issueID = req.params.issueID
+        const commentID = req.params.commentID
+        const creatorID = req.body.creatorID
+
+        const project = await Project.findOne({id : projectID})
+        const user = await User.findOne({id : creatorID})
+        const issue = project.issues.filter(issue => issue.id === issueID)[0]
+        const otherIssues = project.issues.filter(issue => issue.id !== issueID)
+        const comment = issue.comments.filter(comment => comment.id === commentID)[0]
+        
+        comment.replies = [...comment.replies, {
+            "text" : req.body.text,
+            "creatorID" : req.body.creatorID,
+            "createdAt" : Date.now()
+        }]
+
+        issue.history = [...issue.history, {
+            "statement" : `${user.firstName} ${user.lastName[0]} added a reply to issue: ${issue.text}`
+        }]
+
+        const allIssues = otherIssues.concat(issue)
+
+        const updatedProject = await Project.findByIdAndUpdate(project._id, {issues : allIssues})
+
+        res.json({
+            success : true,
+            // issue : issue
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
 
 module.exports = {
     createProject,
     allProjects,
     addIssue, 
-    addComment
+    addComment, 
+    addReply
 }

@@ -58,7 +58,60 @@ async function allUsers (req, res) {
     }
 }
 
+async function loginUser(req, res) {
+
+    console.log('login function')
+    try {
+        const email = req.body.email;
+        const password = req.body.password
+        const user = await User.findOne({email : email})
+
+        if(!user){
+            res.json({
+                success : false,
+                message : 'Could not find user.'
+            }).status(204)
+        }
+        
+        const firstName = user.firstName
+        const lastName = user.lastName
+        console.log(user)
+
+        
+        const isPWValid = await validatePassword(password, user.password)
+
+        
+        if (!isPWValid) {
+            res
+            .json({ success: false, message: "Password was incorrect." })
+            .status(204);
+            return;
+        } 
+
+        // const userType = email.endsWith("@admin.com") ? "admin" : "user";
+
+        const data = {
+            date: new Date(),
+            userId: user.id,
+            userFirstName: user.firstName,
+            userLastName: user.lastName, 
+            email: email
+          };
+
+
+        const token = generateUserToken(data);
+
+        res.json({ success: true, token, firstName, lastName, email});
+        return;
+  
+    }
+    catch (e) {
+        console.log(e)
+    }
+}
+
 module.exports = {
     createUser,
-    allUsers
+    allUsers,
+    loginUser
 }

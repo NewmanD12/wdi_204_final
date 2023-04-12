@@ -110,8 +110,25 @@ async function loginUser(req, res) {
     }
 }
 
+async function getOneByEmail(req, res) {
+    const email = req.params.email
+    try {
+        const user = await User.findOne({email : email})
+        res.json({
+            success : true,
+            user : user
+        })
+    }
+    catch (e) {
+        res.json({
+            error : e.toString()
+        })
+    }
+}
+
 module.exports = {
     createUser,
     allUsers,
-    loginUser
+    loginUser, 
+    getOneByEmail
 }

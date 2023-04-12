@@ -49,18 +49,19 @@ async function addIssue(req, res) {
             {
                 "text" : req.body.text, 
                 "priority" : req.body.priority, 
-                "creatorID" : req.body.creatorID
+                "creatorID" : req.body.creatorID,
+                "stage" : "to-do"
             }]
-        const fullHistory = [...currentHistory, 
-            {
-                "statement" : `${user.firstName} ${user.lastName[0]} added an issue`,
-                "createdAt" : Date.now()
-            }]
+        // const fullHistory = [...currentHistory, 
+        //     {
+        //         "statement" : `${user.firstName} ${user.lastName[0]} added an issue`,
+        //         "createdAt" : Date.now()
+        //     }]
         
         const updatedProject = await Project.findByIdAndUpdate(id, 
             {
                 issues : fullIssues,         
-                history : fullHistory
+                // history : fullHistory
             })
             
         res.json({
@@ -71,7 +72,7 @@ async function addIssue(req, res) {
     catch (e) {
         res.json({
             success : false,
-            error : e
+            error : e.toString()
         })
     }
 }
@@ -150,11 +151,49 @@ async function addReply(req, res){
     }
 }
 
+async function findProjectByID(req, res, next) {
+    const id = req.params.id
+    try {
+        const project = await Project.find({id : id})
+        res.json({
+            success : true,
+            project : project
+        })
+    }
+    catch (e) {
+        res.json({
+            error : e.toString()
+        })
+    }
+}
+
+async function findIssueByID(req, res, next) {
+    const projectId = req.params.projectID
+    const issueId = req.params.issueID
+    try {
+        const project = await Project.find({id : projectId})
+        const issue = project[0].issues.filter((issue) => issue.id === issueId)[0]
+        res.json({
+            success : true,
+            issue : issue
+        })
+    }
+    catch (e) {
+        res.json({
+            error : e.toString()
+        })
+    }
+
+}
+
+
 
 module.exports = {
     createProject,
     allProjects,
+    findProjectByID,
     addIssue, 
+    findIssueByID,
     addComment, 
     addReply
 }

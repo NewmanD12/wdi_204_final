@@ -8,6 +8,7 @@ const projectSchema = new mongoose.Schema({
     id : {type : String, default : uuidv4},
     issues : [{
         text : String,
+        description: String,
         priority : String,
         creatorID : String,
         assigneeID : String,

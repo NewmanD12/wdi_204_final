@@ -15,6 +15,7 @@ export const AuthProvider = ({ children }) => {
     const [userFirstName, setUserFirstName] = useState("")
     const [userLastName, setUserLastName] = useState("")
     const [userEmail, setUserEmail] = useState("")
+    const [userID, setUserID] = useState("")
     const [isAuthLoading, setIsAuthLoading] = useState(false);
 
     useEffect(() => {
@@ -22,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         //get session data if session is still active from the browser
         const userData = getLSUserData();
         
-        console.log(userData)
+        // console.log(userData)
 
         if (userData && userData.token) {
             setUserToken(userData.token);
@@ -36,6 +37,10 @@ export const AuthProvider = ({ children }) => {
         if (userData && userData.email) {
             setUserEmail(userData.email);
         }
+        if (userData && userData.userID) {
+            setUserToken(userData.userID);
+        }
+
     }, [isAuthLoading]);
 
     // call this function when you want to register the user
@@ -80,7 +85,7 @@ export const AuthProvider = ({ children }) => {
             // console.log("auth hook loginResult: ", loginResult)
         if (loginResult.success) {
         //update browser session details 
-            console.log(loginResult)
+            // console.log(loginResult)
             setLSUserData(loginResult.token, loginResult.firstName, loginResult.lastName, loginResult.email);
         }
 
@@ -131,7 +136,8 @@ export const AuthProvider = ({ children }) => {
                 register,
             }),
             [userToken]
-            );
+    );
+
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

@@ -37,5 +37,11 @@
   }
 }
 
+span {
+  margin: 0% 2% 0% 2%;
+  border-radius: 5%;
+  background-color: lightgray;
+  padding: 0% 1% 0% 1%;
+}
 
 

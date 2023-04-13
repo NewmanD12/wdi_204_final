@@ -73,12 +73,16 @@ function App() {
           path : 'projects/get-one/:id',
           element : <SingleProject 
                       projectsUrlEndpoint={projectsUrlEndpoint}
+                      userURLEndpoint={userURLEndpoint}
+                      userList={userList}
                     />
         },
         {
           path : 'issue/:projectID/:issueID',
           element : <SingleIssue 
                       projectsUrlEndpoint={projectsUrlEndpoint}
+                      projectList={projectList}
+                      userList={userList}
                     />
         }
       ]

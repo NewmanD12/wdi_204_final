@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
+import { useAuth } from '../Hooks/Auth'
 import axios from "axios"
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
@@ -9,15 +10,19 @@ import Col from "react-bootstrap/Col"
 
 const SingleProject = (props) => {
     
-    const { projectsUrlEndpoint } = props
+    const { projectsUrlEndpoint, userURLEndpoint, userList } = props
     const { id } = useParams()
+    const auth = useAuth()
     let todoIssues = []
     const [project, setProject] = useState({})
     const [newIssue, setNewIssue] = useState('')
+    const currentUser = userList.filter((user) => user.email === auth.userEmail)[0]
     const navigate = useNavigate()
 
-    const url = `/dashboard/issue/${project.id}`
+    // console.log(props.userList)
 
+    const url = `/dashboard/issue/${project.id}`
+    // console.log(auth)
 
     useEffect(() => {
         axios.get(`${projectsUrlEndpoint}/get-one/${id}`)
@@ -38,15 +43,17 @@ const SingleProject = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         const issue = document.getElementById('text').value
-        let creatorIDInput = '6d34f9ce-328b-4b9e-8a65-43962c65453e'
         console.log(`${projectsUrlEndpoint}/add-issue/${id}`)
         axios.put(`${projectsUrlEndpoint}/add-issue/${id}`, {
             text : issue,
             priority : 'high',
-            creatorID : creatorIDInput
+            creatorID : currentUser.id
         })
         .then((res) => console.log(res))
         .catch((err) => console.log(err.toString()))
+        .finally(() => {
+            window.location.reload(false)
+        })
     }
 
     const addNewIssue = (e) => {
@@ -57,7 +64,7 @@ const SingleProject = (props) => {
         button.innerText = 'Submit'
         let creatorIDInput = document.createElement('input')
         creatorIDInput.type = 'hidden'
-        creatorIDInput.value = '6d34f9ce-328b-4b9e-8a65-43962c65453e'
+        creatorIDInput.value = currentUser.id
 
         console.log(creatorIDInput)
         let textArea = document.createElement('textarea')

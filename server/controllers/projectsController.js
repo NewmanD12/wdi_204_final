@@ -41,7 +41,7 @@ async function addIssue(req, res) {
     try{
         const projectID = req.params.projectID
         const project = await Project.findOne({id : projectID})
-        const user = await User.findOne({id : req.body.creatorID})
+        const user = await User.find({id : req.body.creatorID})
         const id = project._id
         const currentIssues = project.issues
         const currentHistory = project.history
@@ -50,23 +50,28 @@ async function addIssue(req, res) {
                 "text" : req.body.text, 
                 "priority" : req.body.priority, 
                 "creatorID" : req.body.creatorID,
-                "stage" : "to-do"
+                "stage" : "to-do",
+                "history" : [{statement : 'issue was created', createdAt : Date.now()}]
             }]
-        // const fullHistory = [...currentHistory, 
-        //     {
-        //         "statement" : `${user.firstName} ${user.lastName[0]} added an issue`,
-        //         "createdAt" : Date.now()
-        //     }]
+
+        let fullHistory = []
+        if(user){
+            fullHistory = [...currentHistory, 
+                {
+                    "statement" : `${user[0].firstName} ${user[0].lastName[0]} added an issue`,
+                    "createdAt" : Date.now()
+                }]
+        }
         
         const updatedProject = await Project.findByIdAndUpdate(id, 
             {
                 issues : fullIssues,         
-                // history : fullHistory
+                history : fullHistory
             })
             
         res.json({
             success : true,
-            updatedProject : updatedProject
+            updatedProject : updatedProject,
         })
     }
     catch (e) {

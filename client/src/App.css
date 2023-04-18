@@ -60,3 +60,7 @@ span {
 #in-progress-div {
   display: none;
 }
+
+.add-reply-prompt {
+  display: none;
+}

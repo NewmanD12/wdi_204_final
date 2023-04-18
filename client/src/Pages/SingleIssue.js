@@ -5,6 +5,7 @@ import Container from "react-bootstrap/esm/Container"
 import { useParams } from "react-router-dom"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+import CommentCard from "../Components/CommentCard"
 
 
 
@@ -27,10 +28,7 @@ const SingleIssue = (props) => {
 
     const handleCommentSubmit = (e) => {
         e.preventDefault()
-        console.log('adding comment')
         const comment = document.getElementById('commentText').value
-        console.log(comment)
-        console.log(`${projectsUrlEndpoint}/add-comment/${project.id}/${issue.id}`)
         axios.put(`${projectsUrlEndpoint}/add-comment/${project.id}/${issue.id}`, {
             text : comment,
             creatorID : currentUser.id
@@ -111,7 +109,14 @@ const SingleIssue = (props) => {
                     {activityState === 'comments' && issue.comments && (
                         <div>
                             {issue.comments.map((comment, index) => {
-                                return <p key={index}>{comment.text}</p>
+                                return  <CommentCard 
+                                            key={index} 
+                                            comment={comment} 
+                                            currentUser={currentUser}
+                                            projectsUrlEndpoint={projectsUrlEndpoint}
+                                            issue={issue}
+                                            project={project}
+                                        />
                             })}
                             
                             <p id="addCommentButton" onClick={(e) => {

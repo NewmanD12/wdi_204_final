@@ -141,7 +141,8 @@ async function addReply(req, res){
         }]
 
         issue.history = [...issue.history, {
-            "statement" : `${user.firstName} ${user.lastName[0]} added a reply to issue: ${issue.text}`
+            "statement" : `${user.firstName} ${user.lastName[0]} added a reply to comment: ${comment.id}`,
+            'createdAt' : Date.now()
         }]
 
         const allIssues = otherIssues.concat(issue)

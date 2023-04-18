@@ -12,38 +12,38 @@ const projectSchema = new mongoose.Schema({
         priority : String,
         creatorID : String,
         assigneeID : String,
-        stage : String,
-        createdAt : {type: Date, default : Date.now()},
-        lastModified : {type: Date, default : Date.now()},
+        stage : {type : String, default : 'to-do'},
+        createdAt : Date,
+        lastModified : Date,
         lastModifiedByID : String,
         id : {type : String, default : uuidv4},
         history : [{
             statement : String,
-            createdAt : {type: Date}
+            createdAt : Date
         }],
         comments : [{
             text : String,
             creatorID : String,
             id : {type : String, default : uuidv4},
-            createdAt : {type: Date, default : Date.now()},
-            lastModified : {type: Date, default : Date.now()},
+            createdAt : Date,
+            lastModified : Date,
             replies : [{
                 text : String,
                 creatorID : String,
                 id : {type : String, default : uuidv4},
-                createdAt : {type: Date, default : Date.now()},
-                lastModified : {type: Date, default : Date.now()},
+                createdAt : Date,
+                lastModified : Date,
             }]
         }]
     }],
     history : [{
         statement : String,
-        createdAt : {type: Date}
+        createdAt : Date
     }],
     adminIds : [String],
     userIds : [String],
-    createdAt : {type: Date, default : Date.now()},
-    lastModified : {type: Date, default : Date.now()},
+    createdAt : Date,
+    lastModified : Date,
     lastModifiedByID : String
 })
 

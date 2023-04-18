@@ -10,6 +10,7 @@ async function createProject(req, res) {
         const newProject = new Project({
             title,
             description,
+            createdAt : Date.now(),
             adminIds: [creatorID]
         })
 
@@ -50,7 +51,8 @@ async function addIssue(req, res) {
                 "text" : req.body.text, 
                 "priority" : req.body.priority, 
                 "creatorID" : req.body.creatorID,
-                "stage" : "to-do",
+                "stage" : req.body.stage,
+                "createdAt" : Date.now(),
                 "history" : [{statement : 'issue was created', createdAt : Date.now()}]
             }]
 

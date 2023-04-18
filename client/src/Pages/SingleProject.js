@@ -9,12 +9,15 @@ import Col from "react-bootstrap/Col"
 
 
 const SingleProject = (props) => {
-    
+    const rightNow = Date.now()
     const { projectsUrlEndpoint, userURLEndpoint, userList } = props
     const { id } = useParams()
     const auth = useAuth()
     let todoIssues = []
+    let inProgressIssues = []
     const [project, setProject] = useState({})
+    const [stage, setStage] = useState('')
+
     const [newIssue, setNewIssue] = useState('')
     const currentUser = userList.filter((user) => user.email === auth.userEmail)[0]
     const navigate = useNavigate()
@@ -23,6 +26,8 @@ const SingleProject = (props) => {
 
     const url = `/dashboard/issue/${project.id}`
     // console.log(auth)
+
+
 
     useEffect(() => {
         axios.get(`${projectsUrlEndpoint}/get-one/${id}`)
@@ -38,16 +43,26 @@ const SingleProject = (props) => {
         todoIssues = project.issues.filter((issue) => {
             return issue.stage === 'to-do'
         })
+
+        inProgressIssues = project.issues.filter((issue) => {
+            return issue.stage === 'in-progress'
+        })
+        
+       
+
     }
 
-    const handleSubmit = async (e) => {
+
+    const handleSubmit = async (e, issue, stage) => {
         e.preventDefault()
-        const issue = document.getElementById('text').value
-        console.log(`${projectsUrlEndpoint}/add-issue/${id}`)
+        // console.log(`${projectsUrlEndpoint}/add-issue/${id}`)
+        console.log(stage)
         axios.put(`${projectsUrlEndpoint}/add-issue/${id}`, {
             text : issue,
             priority : 'high',
-            creatorID : currentUser.id
+            creatorID : currentUser.id,
+            stage : stage,
+            createdAt : Date.now()
         })
         .then((res) => console.log(res))
         .catch((err) => console.log(err.toString()))
@@ -56,30 +71,38 @@ const SingleProject = (props) => {
         })
     }
 
-    const addNewIssue = (e) => {
-        let col = document.getElementById('todo-col')
-        let form = document.createElement("form")
+    const generateForm = (stage) => {
+        let form = document.createElement('form')
         let button = document.createElement('button')
         button.value = 'submit'
         button.innerText = 'Submit'
         let creatorIDInput = document.createElement('input')
         creatorIDInput.type = 'hidden'
         creatorIDInput.value = currentUser.id
-
-        console.log(creatorIDInput)
+        let stageInput = document.createElement('input')
+        stageInput.type = 'hidden'
+        stageInput.value = stage
         let textArea = document.createElement('textarea')
         textArea.id = 'text'
         
-        // console.log(textArea)
-        button.addEventListener('click', (e) => {
-            handleSubmit(e)
-        })
-
         form.appendChild(textArea)
         form.appendChild(button)
-        col.appendChild(form)
-        console.log(col)
+        form.appendChild(creatorIDInput)
+        form.appendChild(stageInput)
+        
+        button.addEventListener('click', (e) => {
+            e.preventDefault()
+            console.log(textArea.value)
+            handleSubmit(e, textArea.value, stage)
+        })
+
+        console.log(stage)
+        let column = document.getElementById(stage)
+        column.appendChild(form)
+        console.log(form)
+
     }
+
 
     return (
         <Container>
@@ -89,7 +112,8 @@ const SingleProject = (props) => {
                 </Col>
             </Row>
             <Row className="justify-content-center m-3">
-                <Col md={3} id='todo-col'>
+
+                <Col md={3} id='to-do'>
                     <p>To-Do</p>
                     {todoIssues.map((issue, index) => {
                         return  <div 
@@ -101,20 +125,80 @@ const SingleProject = (props) => {
                                     <h6>{issue.text}</h6>
                                 </div>
                     })}
-                    <p onClick={(e) => {
-                        // console.log('add new')
-                        addNewIssue()
-                    }}>+ Create New</p>
+                    <p id="to-do-create-new" onClick={(e) => {
+                        generateForm('to-do')
+                        
 
+                    }}>+ Create New</p>
                 </Col>
-                <Col md={3}>
+
+                <Col md={3} 
+                    id='in-progress' 
+                    onMouseEnter={(e) => {
+                        e.preventDefault()
+                        const createNew = document.getElementById('in-progress-create-new')
+                        createNew.style.display = 'block'
+                    }}
+                    onMouseLeave={(e) => {
+                        const createNew = document.getElementById('in-progress-create-new')
+                        createNew.style.display = 'none'
+                    }}
+                >
                     <p>In Progress</p>
+                    {inProgressIssues.map((issue, index) => {
+                        return  <div
+                                    key={index}
+                                    onClick={(e) => {
+                                        navigate(`${url}/${issue.id}`)
+                                    }}
+                                >
+                                    <h6>{issue.text}</h6>
+                                </div>
+                    })}
+                    <p id="in-progress-create-new" onClick={(e) => {
+                        generateForm('in-progress')
+                    }}>+ Create New</p>
+                    <div id="in-progress-div">
+                        <textarea id='in-progress-issue'></textarea>
+                        <button onSubmit={(e) => {
+
+                        }}>Submit</button>
+                    </div>
                 </Col>
-                <Col md={3}>
+
+                <Col md={3} 
+                    id='in-review'
+                    onMouseEnter={(e) => {
+                        const createNew = document.getElementById('in-review-create-new')
+                        createNew.style.display = 'block'
+                    }}
+                    onMouseLeave={(e) => {
+                        const createNew = document.getElementById('in-review-create-new')
+                        createNew.style.display = 'none'
+                    }}
+                >
                     <p>In Review</p>
+                    <p id="in-review-create-new" onClick={(e) => {
+                        // console.log(e)
+                    }}>+ Create New</p>
                 </Col>
-                <Col md={3}>
+
+                <Col md={3} 
+                    id='done'
+                    onMouseEnter={(e) => {
+                        const createNew = document.getElementById('done-create-new')
+                        createNew.style.display = 'block'
+                    }}
+                    onMouseLeave={(e) => {
+                        const createNew = document.getElementById('done-create-new')
+                        createNew.style.display = 'none'
+                    }}
+                
+                >
                     <p>Done</p>
+                    <p id="done-create-new" onClick={(e) => {
+                        // console.log(e)
+                    }}>+ Create New</p>
                 </Col>
             </Row>
 

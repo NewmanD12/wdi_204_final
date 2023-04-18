@@ -45,3 +45,18 @@ span {
 }
 
 
+#in-progress-create-new {
+  display: none;
+}
+
+#in-review-create-new {
+  display: none;
+}
+
+#done-create-new {
+  display: none;
+}
+
+#in-progress-div {
+  display: none;
+}

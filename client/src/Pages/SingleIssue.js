@@ -70,8 +70,6 @@ const SingleIssue = (props) => {
     }
 
 
-    // console.log(issue.history)
-
     return (
         <Container>
             <Row>

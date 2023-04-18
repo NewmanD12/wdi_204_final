@@ -17,7 +17,7 @@ const Dashboard = (props) => {
 
     const auth = useAuth()
     const firstName = auth.userFirstName
-    console.log(projects)
+    // console.log(projects)
     
 
 

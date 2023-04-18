@@ -15,6 +15,8 @@ const SingleProject = (props) => {
     const auth = useAuth()
     let todoIssues = []
     let inProgressIssues = []
+    let inReviewIssues = []
+    let doneIssues = []
     const [project, setProject] = useState({})
     const [stage, setStage] = useState('')
 
@@ -47,8 +49,14 @@ const SingleProject = (props) => {
         inProgressIssues = project.issues.filter((issue) => {
             return issue.stage === 'in-progress'
         })
-        
-       
+
+        inReviewIssues = project.issues.filter((issue) => {
+            return issue.stage === 'in-review'
+        })
+
+        doneIssues = project.issues.filter((issue) => {
+            return issue.stage === 'done'
+        })
 
     }
 
@@ -126,9 +134,7 @@ const SingleProject = (props) => {
                                 </div>
                     })}
                     <p id="to-do-create-new" onClick={(e) => {
-                        generateForm('to-do')
-                        
-
+                        generateForm('to-do') 
                     }}>+ Create New</p>
                 </Col>
 
@@ -158,12 +164,6 @@ const SingleProject = (props) => {
                     <p id="in-progress-create-new" onClick={(e) => {
                         generateForm('in-progress')
                     }}>+ Create New</p>
-                    <div id="in-progress-div">
-                        <textarea id='in-progress-issue'></textarea>
-                        <button onSubmit={(e) => {
-
-                        }}>Submit</button>
-                    </div>
                 </Col>
 
                 <Col md={3} 
@@ -178,8 +178,18 @@ const SingleProject = (props) => {
                     }}
                 >
                     <p>In Review</p>
+                    {inReviewIssues.map((issue, index) => {
+                        return  <div
+                                    key={index}
+                                    onClick={(e) => {
+                                        navigate(`${url}/${issue.id}`)
+                                    }}
+                                >
+                                    <h6>{issue.text}</h6>
+                                </div>
+                    })}
                     <p id="in-review-create-new" onClick={(e) => {
-                        // console.log(e)
+                        generateForm('in-review')
                     }}>+ Create New</p>
                 </Col>
 
@@ -196,8 +206,18 @@ const SingleProject = (props) => {
                 
                 >
                     <p>Done</p>
+                    {doneIssues.map((issue, index) => {
+                        return  <div
+                                    key={index}
+                                    onClick={(e) => {
+                                        navigate(`${url}/${issue.id}`)
+                                    }}
+                                >
+                                    <h6>{issue.text}</h6>
+                                </div>
+                    })}
                     <p id="done-create-new" onClick={(e) => {
-                        // console.log(e)
+                        generateForm('done')
                     }}>+ Create New</p>
                 </Col>
             </Row>

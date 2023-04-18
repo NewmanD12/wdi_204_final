@@ -29,7 +29,7 @@ const ProjectTable = (props) => {
             <tbody>
                 {projects.map((project, index) => {
                     const projectUrl = `/dashboard/projects/get-one/${project.id}`
-                    console.log(projectUrl)
+                    // console.log(projectUrl)
                     return  <tr key={index}>
                                 <td><a href={projectUrl}>{project.title}</a></td>
                                 <td>{project.issues.length}</td>

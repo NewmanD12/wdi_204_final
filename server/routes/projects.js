@@ -10,5 +10,5 @@ router.put('/add-issue/:projectID', projectController.addIssue)
 router.get('/get-issue/:projectID/:issueID', projectController.findIssueByID)
 router.put('/add-comment/:projectID/:issueID', projectController.addComment)
 router.put('/add-reply/:projectID/:issueID/:commentID', projectController.addReply)
-
-module.exports = router 
+router.put('/add-assignee/:projectID/:issueID', projectController.addAssignee)
+module.exports = router  

@@ -37,6 +37,39 @@ async function allProjects(req, res) {
     }
 }
 
+async function addAssignee(req, res) {
+    try {
+        const projectID = req.params.projectID
+        const issueID = req.params.issueID
+        const assigneeID = req.body.assigneeID
+        const project = await Project.findOne({id : projectID})
+        const currentIssues = project.issues.filter((issue) => issue.id !== issueID)
+        const issue = project.issues.filter((issue) => {return issue.id === issueID})[0]
+        issue.assigneeID = assigneeID
+
+        const fullIssues = [...currentIssues, issue]
+
+        const updatedProject = await Project.findByIdAndUpdate(project._id, 
+            {
+                issues : fullIssues
+            })
+
+
+        res.json({
+            success : true,
+        })
+
+    }
+
+    catch (e) {
+        res.json({
+            success : false,
+            error : e.toString()
+        })
+    }
+
+}
+
 async function addIssue(req, res) {
     
     try{
@@ -203,5 +236,6 @@ module.exports = {
     addIssue, 
     findIssueByID,
     addComment, 
-    addReply
+    addReply,
+    addAssignee
 }

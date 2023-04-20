@@ -5,7 +5,7 @@ const CommentCard = (props) => {
 
     const { comment, currentUser, projectsUrlEndpoint, issue, project } = props
     // console.log(currentUser)
-    console.log(comment.replies)
+    // console.log(comment)
 
 
     const id = 'comment-' + comment.id

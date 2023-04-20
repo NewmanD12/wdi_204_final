@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  background-color: #EFEFD0;
+  padding-bottom: 40%;
 }
 
 .App-logo {
@@ -44,6 +46,16 @@ span {
   padding: 0% 1% 0% 1%;
 }
 
+#add-assignee {
+  background-color: #EFEFD0;
+}
+
+#to-do, #in-progress, #in-review, #done {
+  background-color: #1A659E;
+  padding: 3%;
+  border-radius: 5px;
+  margin: 1%;
+}
 
 #in-progress-create-new {
   display: none;
@@ -64,3 +76,29 @@ span {
 .add-reply-prompt {
   display: none;
 }
+
+.single-issue {
+  background-color: #004E89;
+  color: #F7C59F;
+  text-align: start;
+  margin: 3%;
+  padding: 2%;
+  border-radius: 5px;
+}
+
+#details {
+  text-align: start;
+}
+
+#issue-body {
+  text-align: start;
+}
+
+#user-dropdown {
+  background-color: #EFEFD0;
+  display: none;
+}
+
+/* #add-assignee {
+  display: none;
+} */

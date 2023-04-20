@@ -19,11 +19,20 @@ const SingleIssue = (props) => {
     const auth = useAuth()
     const currentUser = userList.filter((user) => user.email === auth.userEmail)[0]
 
+    let isAdmin = false
 
     const project = projectList.filter((project) => project.id === projectID)[0]
     let issue = {}
+
+
     if(project){
         issue = project.issues.filter((issue) => issue.id === issueID)[0]
+    }
+    console.log(issue)
+    if(project && currentUser){
+        if(project.adminIds.includes(currentUser.id)){
+            isAdmin = true
+        }
     }
 
     const handleCommentSubmit = (e) => {
@@ -67,74 +76,114 @@ const SingleIssue = (props) => {
         // console.log('adding new comment')
     }
 
+    const UserDropdown = () => {
+        
+        return (
+            <select id="user-select">
+                <option value='user'>User</option>
+                {userList.map((user, index) => {
+                    return  <option 
+                                key={index} 
+                                value={user.id}
+                            >
+                                {user.firstName[0].toUpperCase()}{user.firstName.slice(1, user.firstName.length)} {user.lastName[0].toUpperCase()}
+                            </option>
+                })}
+            </select>
+        )
+    }
+
+    const showUserOptions = () => {
+        const addAssigneePrompt = document.getElementById('add-assignee')
+        const userDropdown = document.getElementById('user-dropdown')
+        addAssigneePrompt.style.display = 'none'
+        userDropdown.style.display = 'block'
+    }
+
+    const submitAssignee = () => {
+        const assigneeID = document.getElementById('user-select').value
+        console.log(assigneeID)
+        console.log('project ID: ', project.id)
+        console.log('issue ID: ', issue.id)
+        // axios.put(`${projectsUrlEndpoint}/add-assignee/${project.id}/${issue.id}`,{
+        //     assigneeID : assigneeID
+        // })
+        // .then((res) => console.log(res))
+        // .catch((err) => console.log(err))
+        // .finally(() => {
+        //     window.location.reload(false)
+        // })
+
+    }
+
+    const IssueBody = () => {
+        return  <Container >
+                    <Row>
+                        <Col md={6} id='issue-body'>
+                            <h1>{issue.text}</h1>
+                            <h3>Description</h3>
+                            <p>Add a description...</p>
+                            <h3>Activity</h3>
+                            <h6>Show: 
+                                <span id="all" onClick={(e) =>{
+                                    setActivityState('all')
+                                }}>All</span>
+                                <span id='comments' onClick={(e) => {
+                                    setActivityState('comments')
+                                }}>Comments</span>
+                                <span id="history" onClick={(e) => {
+                                    setActivityState('history')
+                                }}>History</span>
+                            </h6>
+                            <div id="activity-info">
+                                {activityState === 'comments' && issue.comments && (
+                                    <div>
+                                        <p id="addCommentButton" onClick={(e) => {
+                                            addCommentField()
+                                        }}>+ Add Comment</p>
+
+                                        {issue.comments.map((comment, index) => {
+                                            return  <CommentCard 
+                                                        key={index} 
+                                                        comment={comment} 
+                                                        currentUser={currentUser}
+                                                        projectsUrlEndpoint={projectsUrlEndpoint}
+                                                        issue={issue}
+                                                        project={project}
+                                                    />
+                                        })}
+                                    </div>
+                                )}
+                                {activityState === 'history' && issue.history && (
+                                    <div>
+                                        {issue.history.map((history, index) => {
+                                            return <p key={index}>{history.statement} {history.createdAt}</p>
+                                        })}
+                                    </div>
+                                )}
+                            </div>
+                        </Col>
+                        <Col md={6} id='details'>
+                            <h2>Details: </h2> 
+                            <div >
+                                <p>Priority: {issue.priority}</p>
+                                <p>Stage: {issue.stage}</p>
+                                
+                                <p>Assignee:{isAdmin &&<span id="add-assignee" onClick={(e) => {
+                                    showUserOptions()
+                                }}>Click here to add assignee</span>}<span id="user-dropdown"><UserDropdown /><button onClick={submitAssignee}>Save</button></span>
+                                </p>
+                            </div>  
+                        </Col>
+                    </Row>
+                    
+                </Container>
+
+    }
 
     return (
-        <Container>
-            <Row>
-                <Col>
-                    <h1>{issue.text}</h1>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <h3>Description</h3>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <p>Add a description...</p>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <h3>Activity</h3>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <h6>Show: 
-                        <span id="all" onClick={(e) =>{
-                            setActivityState('all')
-                        }}>All</span>
-                        <span id='comments' onClick={(e) => {
-                            setActivityState('comments')
-                        }}>Comments</span>
-                        <span id="history" onClick={(e) => {
-                            setActivityState('history')
-                        }}>History</span></h6>
-                </Col>
-            </Row>
-            <Row>
-                <Col id="activity-info">
-                    {activityState === 'comments' && issue.comments && (
-                        <div>
-                            {issue.comments.map((comment, index) => {
-                                return  <CommentCard 
-                                            key={index} 
-                                            comment={comment} 
-                                            currentUser={currentUser}
-                                            projectsUrlEndpoint={projectsUrlEndpoint}
-                                            issue={issue}
-                                            project={project}
-                                        />
-                            })}
-                            
-                            <p id="addCommentButton" onClick={(e) => {
-                                addCommentField()
-                            }}>+ Add Comment</p>
-                        </div>
-                    )}
-                    {activityState === 'history' && issue.history && (
-                        <div>
-                            {issue.history.map((history, index) => {
-                                return <p key={index}>{history.statement} {history.createdAt}</p>
-                            })}
-                        </div>
-                    )}
-                </Col>
-            </Row>
-
-        
+        <Container fluid>
+            <IssueBody />
         </Container>
     )
 }

@@ -5,6 +5,7 @@ import axios from "axios"
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+import IssueCard from "../Components/IssueCard"
 
 
 
@@ -18,7 +19,6 @@ const SingleProject = (props) => {
     let inReviewIssues = []
     let doneIssues = []
     const [project, setProject] = useState({})
-    const [stage, setStage] = useState('')
 
     const [newIssue, setNewIssue] = useState('')
     const currentUser = userList.filter((user) => user.email === auth.userEmail)[0]
@@ -104,10 +104,10 @@ const SingleProject = (props) => {
             handleSubmit(e, textArea.value, stage)
         })
 
-        console.log(stage)
+        // console.log(stage)
         let column = document.getElementById(stage)
         column.appendChild(form)
-        console.log(form)
+        // console.log(form)
 
     }
 
@@ -121,24 +121,22 @@ const SingleProject = (props) => {
             </Row>
             <Row className="justify-content-center m-3">
 
-                <Col md={3} id='to-do'>
+                <Col lg={4} id='to-do'>
                     <p>To-Do</p>
                     {todoIssues.map((issue, index) => {
-                        return  <div 
+                        return  <IssueCard 
                                     key={index}
-                                    onClick={(e) => {
-                                        navigate(`${url}/${issue.id}`)
-                                    }}
+                                    issue={issue}
+                                    project={project}
                                 >
-                                    <h6>{issue.text}</h6>
-                                </div>
+                                </IssueCard>
                     })}
                     <p id="to-do-create-new" onClick={(e) => {
                         generateForm('to-do') 
                     }}>+ Create New</p>
                 </Col>
 
-                <Col md={3} 
+                <Col lg={4} 
                     id='in-progress' 
                     onMouseEnter={(e) => {
                         e.preventDefault()
@@ -152,21 +150,19 @@ const SingleProject = (props) => {
                 >
                     <p>In Progress</p>
                     {inProgressIssues.map((issue, index) => {
-                        return  <div
+                        return  <IssueCard 
                                     key={index}
-                                    onClick={(e) => {
-                                        navigate(`${url}/${issue.id}`)
-                                    }}
+                                    issue={issue}
+                                    project={project}
                                 >
-                                    <h6>{issue.text}</h6>
-                                </div>
+                                </IssueCard>
                     })}
                     <p id="in-progress-create-new" onClick={(e) => {
                         generateForm('in-progress')
                     }}>+ Create New</p>
                 </Col>
 
-                <Col md={3} 
+                <Col lg={4} 
                     id='in-review'
                     onMouseEnter={(e) => {
                         const createNew = document.getElementById('in-review-create-new')
@@ -179,21 +175,19 @@ const SingleProject = (props) => {
                 >
                     <p>In Review</p>
                     {inReviewIssues.map((issue, index) => {
-                        return  <div
+                        return  <IssueCard 
                                     key={index}
-                                    onClick={(e) => {
-                                        navigate(`${url}/${issue.id}`)
-                                    }}
+                                    issue={issue}
+                                    project={project}
                                 >
-                                    <h6>{issue.text}</h6>
-                                </div>
+                                </IssueCard>
                     })}
                     <p id="in-review-create-new" onClick={(e) => {
                         generateForm('in-review')
                     }}>+ Create New</p>
                 </Col>
 
-                <Col md={3} 
+                <Col lg={4} 
                     id='done'
                     onMouseEnter={(e) => {
                         const createNew = document.getElementById('done-create-new')
@@ -207,14 +201,12 @@ const SingleProject = (props) => {
                 >
                     <p>Done</p>
                     {doneIssues.map((issue, index) => {
-                        return  <div
+                        return  <IssueCard 
                                     key={index}
-                                    onClick={(e) => {
-                                        navigate(`${url}/${issue.id}`)
-                                    }}
+                                    issue={issue}
+                                    project={project}
                                 >
-                                    <h6>{issue.text}</h6>
-                                </div>
+                                </IssueCard>
                     })}
                     <p id="done-create-new" onClick={(e) => {
                         generateForm('done')

@@ -1,20 +1,31 @@
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
+import { useNavigate } from 'react-router-dom';
+import Container from 'react-bootstrap/esm/Container';
+import Col from 'react-bootstrap/esm/Col';
+import Row from 'react-bootstrap/esm/Row';
 
 
 const IssueCard = (props) => {
-    const { issue } = props
+    const { issue, project } = props
+    const url = `/dashboard/issue/${project.id}`
+    // console.log(project)
 
-    console.log(issue)
+    // console.log(issue)
+
+    const navigate = useNavigate()
 
     return (
-        <Card style={{ width: '14rem' }}>
-            <Card.Body>
-                <Card.Title>{issue.text}</Card.Title>
-                {issue.assignee}
+        <Container className='single-issue' onClick={(e) => {
+            navigate(`${url}/${issue.id}`)
+        }}>
+            <Row>
+                <Col>
+                    <p>{issue.text}</p>
+                    {issue.assigneeID && <p>Assignee: </p>}
+                    
+                </Col>
+            </Row>
             
-            </Card.Body>
-        </Card>
+        </Container>
     )
 }
 

@@ -1,0 +1,17 @@
+.modal-background {
+    width: 80%;
+    height: 100%;
+    background-color: rgba(200, 200, 200);
+    align-items: center;
+}
+
+#form-title, #form-desc {
+    text-align: start;
+}
+
+#modal {
+    padding-left: 15%;
+}
+
+
+

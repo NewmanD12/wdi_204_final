@@ -65,6 +65,7 @@ function App() {
           index : true,
           element : <Dashboard 
                       userURLEndpoint={userURLEndpoint}
+                      projectsUrlEndpoint={projectsUrlEndpoint}
                       projects={projectList}
                       users={userList}
                     />

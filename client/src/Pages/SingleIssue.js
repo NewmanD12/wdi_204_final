@@ -28,7 +28,7 @@ const SingleIssue = (props) => {
     if(project){
         issue = project.issues.filter((issue) => issue.id === issueID)[0]
     }
-    console.log(issue)
+    // console.log(issue)
     if(project && currentUser){
         if(project.adminIds.includes(currentUser.id)){
             isAdmin = true

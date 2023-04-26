@@ -5,11 +5,27 @@ import Row from 'react-bootstrap/esm/Row';
 
 
 const IssueCard = (props) => {
-    const { issue, project } = props
+    const { issue, project, userList } = props
     const url = `/dashboard/issue/${project.id}`
-    // console.log(project)
 
-    // console.log(issue)
+
+    
+    const findAssignee = (id) => {
+
+        try{
+            const assignee = userList.filter((user) => {
+                return user.id === id
+            })[0]
+            // console.log(assignee)
+            return assignee.firstName[0].toUpperCase() + assignee.firstName.slice(1, assignee.firstName.length) + ' ' + assignee.lastName[0].toUpperCase()
+
+        }
+        catch (e) {
+            console.log(e)
+        }
+        // console.log(id)
+        
+    }
 
     const navigate = useNavigate()
 
@@ -20,7 +36,7 @@ const IssueCard = (props) => {
             <Row>
                 <Col>
                     <p>{issue.text}</p>
-                    {issue.assigneeID && <p>Assignee: </p>}
+                    {issue.assigneeID && <p>Assignee: {findAssignee(issue.assigneeID)}</p>}
                     
                 </Col>
             </Row>

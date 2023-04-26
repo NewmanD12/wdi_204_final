@@ -7,12 +7,8 @@ import Form from 'react-bootstrap/Form'
 const CreateIssueForm = (props) => {
 
     const { stage, currentUser, projectsUrlEndpoint, project, setAddingIssue } = props
-
-    // console.log(currentUser.id, projectsUrlEndpoint)
-
     const [issue, setIssue] = useState('')
     const [priority, setPriority] = useState('')
-
 
     const handleSubmit = (e) => {
         e.preventDefault()

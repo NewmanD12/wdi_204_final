@@ -88,6 +88,7 @@ const SingleProject = (props) => {
                                     key={index}
                                     issue={issue}
                                     project={project}
+                                    userList={userList}
                                 >
                                 </IssueCard>
                     })}

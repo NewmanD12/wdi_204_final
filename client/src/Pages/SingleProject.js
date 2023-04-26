@@ -6,11 +6,11 @@ import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import IssueCard from "../Components/IssueCard"
+import CreateIssueForm from "../Components/CreateIssueForm"
 
 
 
 const SingleProject = (props) => {
-    const rightNow = Date.now()
     const { projectsUrlEndpoint, userURLEndpoint, userList } = props
     const { id } = useParams()
     const auth = useAuth()
@@ -19,17 +19,11 @@ const SingleProject = (props) => {
     let inReviewIssues = []
     let doneIssues = []
     const [project, setProject] = useState({})
-
-    const [newIssue, setNewIssue] = useState('')
     const currentUser = userList.filter((user) => user.email === auth.userEmail)[0]
-    const navigate = useNavigate()
 
-    // console.log(props.userList)
+    // let addingIssue = false
 
-    const url = `/dashboard/issue/${project.id}`
-    // console.log(auth)
-
-
+    const [addingIssue, setAddingIssue] = useState(false)
 
     useEffect(() => {
         axios.get(`${projectsUrlEndpoint}/get-one/${id}`)
@@ -57,60 +51,13 @@ const SingleProject = (props) => {
         doneIssues = project.issues.filter((issue) => {
             return issue.stage === 'done'
         })
-
     }
 
-
-    const handleSubmit = async (e, issue, stage) => {
-        e.preventDefault()
-        // console.log(`${projectsUrlEndpoint}/add-issue/${id}`)
-        console.log(stage)
-        axios.put(`${projectsUrlEndpoint}/add-issue/${id}`, {
-            text : issue,
-            priority : 'high',
-            creatorID : currentUser.id,
-            stage : stage,
-            createdAt : Date.now()
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err.toString()))
-        .finally(() => {
-            window.location.reload(false)
-        })
-    }
-
-    const generateForm = (stage) => {
-        let form = document.createElement('form')
-        let button = document.createElement('button')
-        button.value = 'submit'
-        button.innerText = 'Submit'
-        let creatorIDInput = document.createElement('input')
-        creatorIDInput.type = 'hidden'
-        creatorIDInput.value = currentUser.id
-        let stageInput = document.createElement('input')
-        stageInput.type = 'hidden'
-        stageInput.value = stage
-        let textArea = document.createElement('textarea')
-        textArea.id = 'text'
-        
-        form.appendChild(textArea)
-        form.appendChild(button)
-        form.appendChild(creatorIDInput)
-        form.appendChild(stageInput)
-        
-        button.addEventListener('click', (e) => {
-            e.preventDefault()
-            console.log(textArea.value)
-            handleSubmit(e, textArea.value, stage)
-        })
-
-        // console.log(stage)
-        let column = document.getElementById(stage)
-        column.appendChild(form)
+    const showForm = (stage) => {
+        const form = document.getElementById(`${stage}-form`)
         // console.log(form)
-
+        form.style.display = 'block'
     }
-
 
     return (
         <Container>
@@ -121,7 +68,20 @@ const SingleProject = (props) => {
             </Row>
             <Row className="justify-content-center m-3">
 
-                <Col lg={4} id='to-do'>
+                <Col    lg={4}
+                        id='to-do'
+                        onMouseEnter={(e) => {
+                            e.preventDefault()
+                            if(!addingIssue){
+                                const createNew = document.getElementById('to-do-create-new')
+                                createNew.style.display = 'block'
+                            }
+                        }}
+                        onMouseLeave={(e) => {
+                            const createNew = document.getElementById('to-do-create-new')
+                            createNew.style.display = 'none'
+                        }}
+                    >
                     <p>To-Do</p>
                     {todoIssues.map((issue, index) => {
                         return  <IssueCard 
@@ -132,8 +92,19 @@ const SingleProject = (props) => {
                                 </IssueCard>
                     })}
                     <p id="to-do-create-new" onClick={(e) => {
-                        generateForm('to-do') 
+                        // console.log(addingIssue)
+                        if(!addingIssue){
+                            setAddingIssue(true)
+                            showForm('to-do')
+                        }
                     }}>+ Create New</p>
+                    <CreateIssueForm 
+                        stage='to-do'
+                        projectsUrlEndpoint={projectsUrlEndpoint}
+                        project={project}
+                        currentUser={currentUser}
+                        setAddingIssue={setAddingIssue}
+                    />
                 </Col>
 
                 <Col lg={4} 
@@ -158,8 +129,19 @@ const SingleProject = (props) => {
                                 </IssueCard>
                     })}
                     <p id="in-progress-create-new" onClick={(e) => {
-                        generateForm('in-progress')
+                        if(!addingIssue){
+                            setAddingIssue(true)
+                            showForm('in-progress')
+                        }
                     }}>+ Create New</p>
+                    <CreateIssueForm 
+                        stage='in-progress'
+                        currentUser={currentUser}
+                        projectsUrlEndpoint={projectsUrlEndpoint}
+                        project={project}
+                        setAddingIssue={setAddingIssue}
+
+                    />
                 </Col>
 
                 <Col lg={4} 
@@ -183,8 +165,18 @@ const SingleProject = (props) => {
                                 </IssueCard>
                     })}
                     <p id="in-review-create-new" onClick={(e) => {
-                        generateForm('in-review')
+                        if(!addingIssue){
+                            setAddingIssue(true)
+                            showForm('in-review')
+                        }
                     }}>+ Create New</p>
+                    <CreateIssueForm 
+                        stage='in-review'
+                        currentUser={currentUser}
+                        projectsUrlEndpoint={projectsUrlEndpoint}
+                        project={project}
+                        setAddingIssue={setAddingIssue}
+                    />
                 </Col>
 
                 <Col lg={4} 
@@ -209,8 +201,18 @@ const SingleProject = (props) => {
                                 </IssueCard>
                     })}
                     <p id="done-create-new" onClick={(e) => {
-                        generateForm('done')
+                        if(!addingIssue){
+                            setAddingIssue(true)
+                            showForm('done')
+                        }
                     }}>+ Create New</p>
+                    <CreateIssueForm 
+                        stage='done'
+                        currentUser={currentUser}
+                        projectsUrlEndpoint={projectsUrlEndpoint}
+                        project={project}
+                        setAddingIssue={setAddingIssue}
+                    />
                 </Col>
             </Row>
 

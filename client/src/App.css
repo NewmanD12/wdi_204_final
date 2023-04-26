@@ -58,17 +58,14 @@ span {
   margin: 1%;
 }
 
-#in-progress-create-new {
+#to-do-create-new, #in-progress-create-new, #in-review-create-new, #done-create-new {
   display: none;
 }
 
-#in-review-create-new {
+#to-do-form, #in-progress-form, #in-review-form, #done-form {
   display: none;
 }
 
-#done-create-new {
-  display: none;
-}
 
 #in-progress-div {
   display: none;

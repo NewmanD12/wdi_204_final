@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  background-color: #EFEFD0;
+  background-color: #050380;
   padding-bottom: 40%;
 }
 
@@ -97,6 +97,28 @@ span {
   display: none;
 }
 
-/* #add-assignee {
-  display: none;
-} */
+.issue-card-col{
+  align-items: center;
+}
+
+.assignee-initials-col {
+  text-align: center;
+  background-color: red;
+  border-radius: 50%;
+}
+
+.assignee-initials {
+  color: black;
+  margin-top: 50%;
+}
+
+#table-container { 
+  padding-top: 20%;
+  color: white;
+}
+
+#single-project-container {
+  padding-top: 20%;
+  color: white;
+}
+

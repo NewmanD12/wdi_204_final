@@ -7,6 +7,7 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import IssueCard from "../Components/IssueCard"
 import CreateIssueForm from "../Components/CreateIssueForm"
+import NavBar from "../Components/NavBar"
 
 
 
@@ -19,6 +20,7 @@ const SingleProject = (props) => {
     let inReviewIssues = []
     let doneIssues = []
     const [project, setProject] = useState({})
+    const [showNav, setShowNav] = useState(false)
     const currentUser = userList.filter((user) => user.email === auth.userEmail)[0]
 
     // let addingIssue = false
@@ -60,28 +62,28 @@ const SingleProject = (props) => {
     }
 
     return (
-        <Container>
+        <Container id="single-project-container">
             <Row>
                 <Col>
-                    <h1>Title: {project.title}</h1>
+                    <h1>Project: {project.title}</h1>
                 </Col>
             </Row>
             <Row className="justify-content-center m-3">
-
-                <Col    lg={4}
-                        id='to-do'
-                        onMouseEnter={(e) => {
-                            e.preventDefault()
-                            if(!addingIssue){
-                                const createNew = document.getElementById('to-do-create-new')
-                                createNew.style.display = 'block'
-                            }
-                        }}
-                        onMouseLeave={(e) => {
+                <Col    
+                    lg={3}    
+                    id='to-do'
+                    onMouseEnter={(e) => {
+                        e.preventDefault()
+                        if(!addingIssue){
                             const createNew = document.getElementById('to-do-create-new')
-                            createNew.style.display = 'none'
-                        }}
-                    >
+                            createNew.style.display = 'block'
+                        }
+                    }}
+                    onMouseLeave={(e) => {
+                        const createNew = document.getElementById('to-do-create-new')
+                        createNew.style.display = 'none'
+                    }}
+                >
                     <p>To-Do</p>
                     {todoIssues.map((issue, index) => {
                         return  <IssueCard 
@@ -108,7 +110,8 @@ const SingleProject = (props) => {
                     />
                 </Col>
 
-                <Col lg={4} 
+                <Col 
+                    lg={3} 
                     id='in-progress' 
                     onMouseEnter={(e) => {
                         e.preventDefault()
@@ -145,7 +148,8 @@ const SingleProject = (props) => {
                     />
                 </Col>
 
-                <Col lg={4} 
+                <Col 
+                    lg={3} 
                     id='in-review'
                     onMouseEnter={(e) => {
                         const createNew = document.getElementById('in-review-create-new')
@@ -180,7 +184,8 @@ const SingleProject = (props) => {
                     />
                 </Col>
 
-                <Col lg={4} 
+                <Col 
+                    lg={3} 
                     id='done'
                     onMouseEnter={(e) => {
                         const createNew = document.getElementById('done-create-new')

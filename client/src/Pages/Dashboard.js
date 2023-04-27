@@ -24,7 +24,7 @@ const Dashboard = (props) => {
     }
 
     return (
-        <div>
+        <div id='table-container'>
             <Container>
                 <div id='main-body'>
                     <h1>Hello {firstName}</h1>

@@ -17,13 +17,11 @@ const IssueCard = (props) => {
                 return user.id === id
             })[0]
             // console.log(assignee)
-            return assignee.firstName[0].toUpperCase() + assignee.firstName.slice(1, assignee.firstName.length) + ' ' + assignee.lastName[0].toUpperCase()
+            return assignee.firstName[0].toUpperCase() + assignee.lastName[0].toUpperCase()
 
         }
         catch (e) {
-            console.log(e)
         }
-        // console.log(id)
         
     }
 
@@ -34,11 +32,14 @@ const IssueCard = (props) => {
             navigate(`${url}/${issue.id}`)
         }}>
             <Row>
-                <Col>
+                <Col className='m-3'>
                     <p>{issue.text}</p>
-                    {issue.assigneeID && <p>Assignee: {findAssignee(issue.assigneeID)}</p>}
-                    
                 </Col>
+            {issue.assigneeID &&    <Col xs={2} className='assignee-initials-col m-2'>
+                                        <p className='assignee-initials'>{findAssignee(issue.assigneeID)}</p>
+                                    </Col>
+            }
+                
             </Row>
             
         </Container>

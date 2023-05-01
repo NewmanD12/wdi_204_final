@@ -6,6 +6,9 @@ import { useParams } from "react-router-dom"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import CommentCard from "../Components/CommentCard"
+import AddCommentForm from "../Components/AddCommentForm"
+
+import './SingleIssue.css'
 
 
 
@@ -20,10 +23,19 @@ const SingleIssue = (props) => {
     const currentUser = userList.filter((user) => user.email === auth.userEmail)[0]
 
     let isAdmin = false
-
+    let hasAssignee = false
+    const [isCommenting, setIsCommenting] = useState(false)
+    
     const project = projectList.filter((project) => project.id === projectID)[0]
     let issue = {}
+    let assignee = {}
 
+    const findAssignee = (id) => {
+        const assignee = userList.filter((user) => {
+            return user.id === id
+        })[0]
+        return assignee.firstName[0].toUpperCase() + assignee.firstName.slice(1, assignee.firstName.length) + ' ' + assignee.lastName[0].toUpperCase()
+    }
 
     if(project){
         issue = project.issues.filter((issue) => issue.id === issueID)[0]
@@ -32,6 +44,10 @@ const SingleIssue = (props) => {
     if(project && currentUser){
         if(project.adminIds.includes(currentUser.id)){
             isAdmin = true
+        }
+        if(issue.assigneeID){
+            hasAssignee = true
+            assignee = findAssignee(issue.assigneeID)
         }
     }
 
@@ -49,32 +65,7 @@ const SingleIssue = (props) => {
         })
     }
 
-    const addCommentField = () => {
-        let col = document.getElementById('activity-info')
-        let addButton = document.getElementById("addCommentButton")
-        addButton.style.display = 'none'
-        let form = document.createElement("form")
-        let saveButton = document.createElement('button')
-        saveButton.value = 'submit'
-        saveButton.innerText = 'Save'
-        saveButton.addEventListener('click', (e) => {
-            handleCommentSubmit(e)
-        })
-        let cancelButton = document.createElement('button')
-        cancelButton.innerText = 'Cancel'
-        let commentArea = document.createElement('textarea')
-        commentArea.id = 'commentText'
-        let creatorIDInput = document.createElement('input')
-        creatorIDInput.type = 'hidden'
-        creatorIDInput.value = currentUser.id
 
-        form.appendChild(commentArea)
-        form.appendChild(saveButton)
-        form.appendChild(cancelButton)
-        form.appendChild(creatorIDInput)
-        col.appendChild(form)
-        // console.log('adding new comment')
-    }
 
     const UserDropdown = () => {
         
@@ -105,25 +96,25 @@ const SingleIssue = (props) => {
         console.log(assigneeID)
         console.log('project ID: ', project.id)
         console.log('issue ID: ', issue.id)
-        // axios.put(`${projectsUrlEndpoint}/add-assignee/${project.id}/${issue.id}`,{
-        //     assigneeID : assigneeID
-        // })
-        // .then((res) => console.log(res))
-        // .catch((err) => console.log(err))
-        // .finally(() => {
-        //     window.location.reload(false)
-        // })
+        axios.put(`${projectsUrlEndpoint}/add-assignee/${project.id}/${issue.id}`,{
+            assigneeID : assigneeID
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
+        .finally(() => {
+            window.location.reload(false)
+        })
 
     }
 
     const IssueBody = () => {
-        return  <Container >
+        return  <Container className="single-issue-body">
                     <Row>
                         <Col md={6} id='issue-body'>
                             <h1>{issue.text}</h1>
-                            <h3>Description</h3>
+                            <h5>Description</h5>
                             <p>Add a description...</p>
-                            <h3>Activity</h3>
+                            <h5>Activity</h5>
                             <h6>Show: 
                                 <span id="all" onClick={(e) =>{
                                     setActivityState('all')
@@ -139,8 +130,18 @@ const SingleIssue = (props) => {
                                 {activityState === 'comments' && issue.comments && (
                                     <div>
                                         <p id="addCommentButton" onClick={(e) => {
-                                            addCommentField()
+                                            setIsCommenting(true)
+                                            console.log('clicked')
                                         }}>+ Add Comment</p>
+
+
+                                        {isCommenting &&    <AddCommentForm 
+                                                                setIsCommenting={setIsCommenting}
+                                                                projectsUrlEndpoint={projectsUrlEndpoint}
+                                                                project={project}
+                                                                issue={issue}
+                                                                currentUser={currentUser}
+                                                            />}
 
                                         {issue.comments.map((comment, index) => {
                                             return  <CommentCard 
@@ -164,14 +165,15 @@ const SingleIssue = (props) => {
                             </div>
                         </Col>
                         <Col md={6} id='details'>
-                            <h2>Details: </h2> 
+                            <h5>Details: </h5> 
                             <div >
                                 <p>Priority: {issue.priority}</p>
                                 <p>Stage: {issue.stage}</p>
                                 
-                                <p>Assignee:{isAdmin &&<span id="add-assignee" onClick={(e) => {
+                                <p>Assignee: {isAdmin && !hasAssignee &&<span id="add-assignee" onClick={(e) => {
                                     showUserOptions()
                                 }}>Click here to add assignee</span>}<span id="user-dropdown"><UserDropdown /><button onClick={submitAssignee}>Save</button></span>
+                                {isAdmin && hasAssignee &&<span>{assignee}</span>}
                                 </p>
                             </div>  
                         </Col>

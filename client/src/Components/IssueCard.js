@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import './IssueCard.css'
 import Container from 'react-bootstrap/esm/Container';
 import Col from 'react-bootstrap/esm/Col';
 import Row from 'react-bootstrap/esm/Row';
@@ -35,11 +36,6 @@ const IssueCard = (props) => {
                 <Col className='m-3'>
                     <p>{issue.text}</p>
                 </Col>
-            {issue.assigneeID &&    <Col xs={2} className='assignee-initials-col m-2'>
-                                        <p className='assignee-initials'>{findAssignee(issue.assigneeID)}</p>
-                                    </Col>
-            }
-                
             </Row>
             
         </Container>

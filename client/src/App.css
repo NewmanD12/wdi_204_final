@@ -1,7 +1,8 @@
 .App {
   text-align: center;
   background-color: #050380;
-  padding-bottom: 40%;
+  padding-bottom: 100%;
+  background-size: cover;
 }
 
 
@@ -40,16 +41,6 @@
   }
 }
 
-span {
-  margin: 0% 2% 0% 2%;
-  border-radius: 5%;
-  background-color: lightgray;
-  padding: 0% 1% 0% 1%;
-}
-
-#add-assignee {
-  background-color: #EFEFD0;
-}
 
 #to-do, #in-progress, #in-review, #done {
   background-color: #1A659E;
@@ -93,7 +84,7 @@ span {
 }
 
 #user-dropdown {
-  background-color: #EFEFD0;
+  /* background-color: #EFEFD0; */
   display: none;
 }
 

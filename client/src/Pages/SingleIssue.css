@@ -1,0 +1,31 @@
+.single-issue-body {
+    background-color: lightcyan;
+    padding-top: 5%;
+}
+
+#all, #comments, #history {
+    margin: 0% 2% 0% 2%;
+    border-radius: 5%;
+    background-color: lightgray;
+    padding: 0% 1% 0% 1%;
+}
+
+#comment-form-wrapper{
+    background-color: rgb(215, 102, 15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+    margin: 10%;
+    padding: 10% 0% 10% 0%;
+    border-radius: 2%;
+}
+
+#comment-submit-button{
+    margin: 0 45px 0 4px;
+}
+
+#lower-buttons{
+    margin-top: 30px;
+}
+

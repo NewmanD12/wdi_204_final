@@ -2,6 +2,9 @@ import Nav from 'react-bootstrap/Nav'
 import './NavBar.css'
 import { useAuth } from "../Hooks/Auth";
 import { useNavigate } from 'react-router-dom';
+import Container from 'react-bootstrap/esm/Container';
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
 
 const NavBar = (props) => {
     
@@ -17,24 +20,26 @@ const NavBar = (props) => {
         bar1.classList.toggle('change')
         bar2.classList.toggle('change')
         bar3.classList.toggle('change')
-        // console.log(bar1)
-        // console.log(bar2)
-        // console.log(bar3)
+        console.log(bar1)
+        console.log(bar2)
+        console.log(bar3)
     }
 
     return (
-        <div id='nav-wrapper'>
-            <div>
-                <p>Jira Clone</p>
-            </div>
-            <div>
-                <div id='menu-button-container' className="menu-button-container" onClick={changeMenu}>
-                    <div id='bar1' className="bar1"></div>
-                    <div id='bar2' className="bar2"></div>
-                    <div id='bar3' className="bar3"></div>
-                </div>
-            </div>
-        </div>
+        <Container id='complete-nav-wrapper'>
+            <Row id='top-nav-wrapper'>
+                <Col  xs={8}>
+                    <h2>Jira Clone</h2>
+                </Col>
+                <Col xs={3} id='menu-button-container'>
+                    <div  className="menu-button-container" onClick={changeMenu}>
+                        <div id='bar1' className="bar1"></div>
+                        <div id='bar2' className="bar2"></div>
+                        <div id='bar3' className="bar3"></div>
+                    </div>
+                </Col>
+            </Row>
+        </Container>
     )
 }
 export default NavBar;

@@ -31,8 +31,6 @@ async function createUser(req, res) {
             const savedData = await newUser.save()
             res.json({
                 success : true,
-                user : savedData,
-                userFound: user
             })
         }
         
@@ -60,7 +58,6 @@ async function allUsers (req, res) {
 
 async function loginUser(req, res) {
 
-    console.log('login function')
     try {
         const email = req.body.email;
         const password = req.body.password
@@ -75,7 +72,6 @@ async function loginUser(req, res) {
         
         const firstName = user.firstName
         const lastName = user.lastName
-        console.log(user)
 
         
         const isPWValid = await validatePassword(password, user.password)

@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useAuth } from "../Hooks/Auth"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Container from "react-bootstrap/esm/Container"
 import { useParams } from "react-router-dom"
 import Row from "react-bootstrap/Row"
@@ -51,22 +51,6 @@ const SingleIssue = (props) => {
         }
     }
 
-    const handleCommentSubmit = (e) => {
-        e.preventDefault()
-        const comment = document.getElementById('commentText').value
-        axios.put(`${projectsUrlEndpoint}/add-comment/${project.id}/${issue.id}`, {
-            text : comment,
-            creatorID : currentUser.id
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
-        .finally(() => {
-            window.location.reload(false)
-        })
-    }
-
-
-
     const UserDropdown = () => {
         
         return (
@@ -93,9 +77,6 @@ const SingleIssue = (props) => {
 
     const submitAssignee = () => {
         const assigneeID = document.getElementById('user-select').value
-        console.log(assigneeID)
-        console.log('project ID: ', project.id)
-        console.log('issue ID: ', issue.id)
         axios.put(`${projectsUrlEndpoint}/add-assignee/${project.id}/${issue.id}`,{
             assigneeID : assigneeID
         })
@@ -137,6 +118,7 @@ const SingleIssue = (props) => {
                                                         projectsUrlEndpoint={projectsUrlEndpoint}
                                                         issue={issue}
                                                         project={project}
+                                                        userList={userList}
                                                     />
                                         })}
                                         {isCommenting &&    <AddCommentForm 

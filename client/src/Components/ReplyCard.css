@@ -1,0 +1,10 @@
+.single-reply {
+    background-color: lightgreen;
+    margin-top: 2%;
+    padding: 3%;
+    border-radius: 3%;
+}
+
+.user-reply {
+    margin-left: 10%;
+}

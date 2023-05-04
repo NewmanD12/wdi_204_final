@@ -11,12 +11,11 @@
 }
 
 #comment-form-wrapper{
-    background-color: rgb(215, 102, 15);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 70%;
-    margin: 10%;
+    width: 80%;
+    margin: 3%;
     padding: 10% 0% 10% 0%;
     border-radius: 2%;
 }
@@ -27,5 +26,12 @@
 
 #lower-buttons{
     margin-top: 30px;
+}
+
+.comment-cards {
+    background-color: darkcyan;
+    padding: 2%;
+    margin: 2%;
+    border-radius: 4px;
 }
 

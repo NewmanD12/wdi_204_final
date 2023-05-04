@@ -20,18 +20,17 @@
 }
 
 /* Rotate first bar */
-.bar1 .change {
-    background-color: white;
+.bar1.change {
     transform: translate(0, 11px) rotate(-45deg);
 }
 
 /* Fade out the second bar */
-.bar2 .change {
+.bar2.change {
     opacity: 0;
 }
 
 /* Rotate last bar */
-.bar3 .change {
+.bar3.change {
     transform: translate(0, -11px) rotate(45deg);
 }
 
@@ -40,3 +39,23 @@
     padding: 3%;
     color: white;
 }
+
+.vertical-menu {
+  width: 200px; /* Set a width if you like */
+}
+
+.vertical-menu a {
+  color: black;
+  display: block; 
+  padding: 12px;
+  text-decoration: none; 
+}
+
+.vertical-menu a:hover {
+  background-color: #ccc;
+  color: black;
+}
+
+/* #nav-links{
+    display: none;
+} */

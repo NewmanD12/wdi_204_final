@@ -129,20 +129,6 @@ const SingleIssue = (props) => {
                             <div id="activity-info">
                                 {activityState === 'comments' && issue.comments && (
                                     <div>
-                                        <p id="addCommentButton" onClick={(e) => {
-                                            setIsCommenting(true)
-                                            console.log('clicked')
-                                        }}>+ Add Comment</p>
-
-
-                                        {isCommenting &&    <AddCommentForm 
-                                                                setIsCommenting={setIsCommenting}
-                                                                projectsUrlEndpoint={projectsUrlEndpoint}
-                                                                project={project}
-                                                                issue={issue}
-                                                                currentUser={currentUser}
-                                                            />}
-
                                         {issue.comments.map((comment, index) => {
                                             return  <CommentCard 
                                                         key={index} 
@@ -153,6 +139,17 @@ const SingleIssue = (props) => {
                                                         project={project}
                                                     />
                                         })}
+                                        {isCommenting &&    <AddCommentForm 
+                                            setIsCommenting={setIsCommenting}
+                                            projectsUrlEndpoint={projectsUrlEndpoint}
+                                            project={project}
+                                            issue={issue}
+                                            currentUser={currentUser}
+                                        />}
+                                        <p id="addCommentButton" onClick={(e) => {
+                                            setIsCommenting(true)
+                                            console.log('clicked')
+                                        }}>+ Add Comment</p>
                                     </div>
                                 )}
                                 {activityState === 'history' && issue.history && (

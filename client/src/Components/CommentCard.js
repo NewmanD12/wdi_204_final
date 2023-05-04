@@ -4,9 +4,6 @@ import axios from "axios"
 const CommentCard = (props) => {
 
     const { comment, currentUser, projectsUrlEndpoint, issue, project } = props
-    // console.log(currentUser)
-    // console.log(comment)
-
 
     const id = 'comment-' + comment.id
     const divId = 'div-' + comment.id
@@ -76,6 +73,7 @@ const CommentCard = (props) => {
                 hidePrompt()
             }}
             id={divId}
+            className='comment-cards'
         >
             <h4>
                 {comment.text}

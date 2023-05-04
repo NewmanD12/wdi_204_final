@@ -104,12 +104,18 @@
 }
 
 #table-container { 
-  padding-top: 20%;
+  padding-top: 5%;
   color: white;
 }
 
 #single-project-container {
   padding-top: 20%;
   color: white;
+}
+
+
+#welcome-container {
+  color: white;
+  padding-top: 10%;
 }
 

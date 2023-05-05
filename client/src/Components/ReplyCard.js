@@ -19,7 +19,7 @@ const ReplyCard = (props) => {
 
     return  <Container className="single-reply">
                 <Row>
-                    <Col>
+                    <Col className="single-reply-wrapper">
                         <p>{reply.text}</p>
                         <p className="user-reply">- {findCreator(reply.creatorID)}</p>
                     </Col>

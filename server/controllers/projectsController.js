@@ -192,6 +192,40 @@ async function addReply(req, res){
     }
 }
 
+async function addDescription(req, res, next) {
+    try {
+        const projectID = req.params.projectID
+        const issueID = req.params.issueID
+        const description = req.body.description
+        
+        const project = await Project.findOne({id : projectID})
+        const issue = project.issues.filter(issue => issue.id === issueID)[0]
+        issue.description = description
+        const otherIssues = project.issues.filter(issue => issue.id !== issueID)
+        const allIssues = otherIssues.concat(issue)
+
+
+
+        const updatedProject = await Project.findByIdAndUpdate(project._id, {issues : allIssues})
+
+        res.json({
+            success : true,
+        })
+
+
+
+    }
+    catch (e) {
+        res.json({
+            success : false, 
+            error : e.toString()
+        })
+    }
+
+
+
+}
+
 async function findProjectByID(req, res, next) {
     const id = req.params.id
     try {
@@ -237,5 +271,6 @@ module.exports = {
     findIssueByID,
     addComment, 
     addReply,
-    addAssignee
+    addAssignee,
+    addDescription
 }

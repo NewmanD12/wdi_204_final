@@ -29,13 +29,33 @@
 }
 
 .comment-cards {
-    background-color: darkcyan;
+    background-color: lightblue;
     padding: 2%;
-    margin: 2%;
-    border-radius: 4px;
+    margin: 8% 0;
+    border-radius: 45px;
 }
 
 .reply-form {
     display: none;
 }
 
+#desc-form {
+    display: flex;
+}
+
+.desc-buttons{
+    width: 100px;
+    margin: 5%;
+}
+
+#description-input{
+    display: none;
+}
+
+#issue-body-top {
+    margin: 0% 0 4% 0;
+}
+
+#desc-wrapper{
+    margin: 5% 0;
+}

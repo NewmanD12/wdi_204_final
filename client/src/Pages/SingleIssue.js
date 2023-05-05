@@ -7,8 +7,12 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import CommentCard from "../Components/CommentCard"
 import AddCommentForm from "../Components/AddCommentForm"
+import Form from "react-bootstrap/Form"
+import InputGroup  from "react-bootstrap/esm/InputGroup"
+
 
 import './SingleIssue.css'
+import Button from "react-bootstrap/esm/Button"
 
 
 
@@ -88,25 +92,102 @@ const SingleIssue = (props) => {
 
     }
 
+    const handleDescSubmit = () => {
+        const text = document.getElementById('description-text').value
+        axios.put(`${projectsUrlEndpoint}/add-description/${project.id}/${issue.id}`, {
+            description : text,
+            creatorID : currentUser.id
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
+        .finally(() => {
+            window.location.reload(false)
+        })
+    }
+
+    const DescriptionInput = () => {
+
+        return (
+            <Form id="desc-form">
+                <InputGroup>
+                    <Form.Control as='textarea' id="description-text"/>
+                </InputGroup>
+                <div>
+                    <Button className="desc-buttons" variant="success"
+                        onClick={(e) => {
+                            handleDescSubmit()
+                        }}
+                    >Save</Button>
+                    <Button className="desc-buttons" variant="danger"
+                        onClick={(e) => {
+                            toggleDescInput()
+                        }}
+                    >Cancel</Button>
+                </div>
+            </Form>
+        )
+    }
+
+    const toggleDescInput = (placeholder) => {
+        const div = document.getElementById('description-input')
+        const input = document.getElementById('description-text')
+        const currentDescription = document.getElementById('description')
+        // console.log(div)
+        if(div.style.display !== 'block'){
+            // console.log(input)
+            currentDescription.style.display = 'none'
+            input.placeholder = placeholder
+            div.style.display = 'block'
+        }
+        else {
+            div.style.display = 'none'
+            currentDescription.style.display = 'block'
+        }
+    }
+
+    console.log(issue)
+
     const IssueBody = () => {
         return  <Container className="single-issue-body">
                     <Row>
                         <Col md={6} id='issue-body'>
-                            <h1>{issue.text}</h1>
-                            <h5>Description</h5>
-                            <p>Add a description...</p>
-                            <h5>Activity</h5>
-                            <h6>Show: 
-                                <span id="all" onClick={(e) =>{
-                                    setActivityState('all')
-                                }}>All</span>
+                            <div id="issue-body-top">
+                                <h3>Issue: {issue.text}</h3>
+                                <div id="desc-wrapper">
+                                    {!issue.description && <p onClick={(e) => {
+                                        toggleDescInput('')
+                                    }}>Add a description...</p>}
+                                    <p onClick={(e) => {
+                                        toggleDescInput(issue.description)
+                                    }} id='description'>{issue.description}</p>
+                                </div>
+                            </div>
+                            
+                            <div id='description-input'>
+                                <DescriptionInput />
+                            </div>                           
+                            <h3>Details: </h3> 
+                            <div>
+                                <p>Priority: {issue.priority}</p>
+                                <p>Stage: {issue.stage}</p>
+                                <p>Assignee: {isAdmin && !hasAssignee &&<span id="add-assignee" onClick={(e) => {
+                                    showUserOptions()
+                                }}>Click here to add assignee</span>}<span id="user-dropdown"><UserDropdown /><button onClick={submitAssignee}>Save</button></span>
+                                {isAdmin && hasAssignee &&<span>{assignee}</span>}
+                                </p>
+                            </div> 
+                            
+                        </Col>
+                        <Col md={6} id='details'>
+                            <h3>Activity</h3> 
+                            <p>Show: 
                                 <span id='comments' onClick={(e) => {
                                     setActivityState('comments')
                                 }}>Comments</span>
                                 <span id="history" onClick={(e) => {
                                     setActivityState('history')
                                 }}>History</span>
-                            </h6>
+                            </p>
                             <div id="activity-info">
                                 {activityState === 'comments' && issue.comments && (
                                     <div>
@@ -142,19 +223,6 @@ const SingleIssue = (props) => {
                                     </div>
                                 )}
                             </div>
-                        </Col>
-                        <Col md={6} id='details'>
-                            <h5>Details: </h5> 
-                            <div >
-                                <p>Priority: {issue.priority}</p>
-                                <p>Stage: {issue.stage}</p>
-                                
-                                <p>Assignee: {isAdmin && !hasAssignee &&<span id="add-assignee" onClick={(e) => {
-                                    showUserOptions()
-                                }}>Click here to add assignee</span>}<span id="user-dropdown"><UserDropdown /><button onClick={submitAssignee}>Save</button></span>
-                                {isAdmin && hasAssignee &&<span>{assignee}</span>}
-                                </p>
-                            </div>  
                         </Col>
                     </Row>
                     

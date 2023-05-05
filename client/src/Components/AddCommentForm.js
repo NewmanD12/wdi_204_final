@@ -17,7 +17,6 @@ const AddCommentForm = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault()
         const comment = document.getElementById('comment-text').value
-        console.log(comment)
         axios.put(`${projectsUrlEndpoint}/add-comment/${project.id}/${issue.id}`, {
             text : comment,
             creatorID : currentUser.id

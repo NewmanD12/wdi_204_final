@@ -1,10 +1,16 @@
 .single-reply {
-    background-color: lightgreen;
-    margin-top: 2%;
-    padding: 3%;
-    border-radius: 3%;
+    background-color: white;
+    margin-top: 3%;
+
+    border-radius: 55%;
+    text-align: center;
 }
 
 .user-reply {
-    margin-left: 10%;
+    margin-left: 5%;
+    size: 5px;
+}
+
+.single-reply-wrapper{
+    padding: 5% 0;
 }

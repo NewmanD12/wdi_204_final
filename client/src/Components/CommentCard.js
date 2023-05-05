@@ -47,9 +47,9 @@ const CommentCard = (props) => {
             id={divId}
             className='comment-cards'
         >
-            <p>{findCreator(comment.creatorID)}</p>
-            <h4>
-                {comment.text}
+        <h4>
+            <h3>{comment.text}</h3>
+            <p className="user-reply">-{findCreator(comment.creatorID)}</p>
             </h4>
             {comment.replies.map((reply, index) => {
                 return  <ReplyCard 
